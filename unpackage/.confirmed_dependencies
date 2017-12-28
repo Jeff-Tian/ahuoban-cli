@@ -1,0 +1,24 @@
+{
+  "index.html": {
+    "refer": [
+      "plus/barcode.html",
+      "plus/file.html",
+      "plus/njs.html",
+      "plus/oauth.html",
+      "detail.html"
+    ],
+    "resources": []
+  },
+  "plus/barcode.html": {
+    "refer": [
+      "plus/barcode_scan.html"
+    ],
+    "resources": []
+  },
+  "plus/njs.html": {
+    "refer": [
+      "plus/njs_efficient.html"
+    ],
+    "resources": []
+  }
+}
