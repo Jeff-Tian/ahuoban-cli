@@ -23,15 +23,41 @@
 			<div class="kr-article-content">
 				<!-- 文章作者、发布时间等信息 -->
 				<div class="kr-article-meta">
-					<div id="kr-article-author" class="kr-article-author">{{author}}</div>
-					<div class="kr-article-text">发表于</div>
+					<div class="kr-article-text">时间</div>
 					<div id="kr-article-time" class="kr-article-time">{{time}}</div>
+				</div>
+				<div class="kr-article-meta">
+					<div class="kr-article-text">地点</div>
+					<div class="kr-article-text">{{location}}</div>
+				</div>
+				<div class="kr-article-meta">
+					<div class="kr-article-text">名额</div>
+					<div class="kr-article-text">{{spots}} 人</div>
+				</div>
+				<div class="kr-article-meta">
+					<div class="kr-article-text">发起人</div>
+					<div class="kr-article-text">{{author}}</div>
+				</div>
+				<div class="kr-article-meta">
+					<div class="kr-article-text">活动费用</div>
+					<div class="kr-article-text">{{cost}} 元</div>
+				</div>
+				<div class="kr-article-meta">
+					<div class="kr-article-text">咨询电话</div>
+					<div class="kr-article-text">{{tel}}</div>
+				</div>
+				<div class="kr-article-meta">
+					<div class="kr-article-text">报名时间</div>
+					<div class="kr-article-text">{{registerStart}}</div>
+					<div class="kr-article-text">至</div>
+					<div class="kr-article-text">{{registerEnd}}</div>
 				</div>
 				<!--文章详细内容-->
 				<div id="kr-article-article" class="kr-article-article" v-html="content"></div>
 			</div>
+			
 		</div>
-
+		
 		<script src="js/mui.min.js"></script>
 		<script src="js/vue.min.js" type="text/javascript" charset="utf-8"></script>
 		<script type="text/javascript">
@@ -43,7 +69,13 @@
 					title: '',
 					author: '',
 					time: '',
-					content: ''
+					content: '',
+					location:'',
+					spots: '',
+					cost: '',
+					tel: '',
+					registerStart: '',
+					registerEnd: ''
 				}
 			}
 
@@ -70,12 +102,19 @@
 				vm.author = event.detail.author;
 				vm.time = event.detail.time;
 				//向服务端请求文章详情内容
-				mui.ajax('http://spider.dcloud.net.cn/api/news/36kr/' + guid, {
+				mui.ajax('https://www.ahuoban.com/plugin.php?id=xj_event:wsqcenter&mod=event_view&format=json&tid=' + guid, {
 					type:'GET',
 					dataType: 'json', //服务器返回json格式数据
 					timeout: 15000, //15秒超时
 					success: function(rsp) {
-						vm.content = rsp.content;
+						vm.content = rsp.data.thread_body;
+						vm.location = rsp.data.items.event_address;
+						vm.spots = rsp.data.items.event_number;
+						vm.time = new Date(Number(rsp.data.items.starttime) * 1000);
+						vm.cost = rsp.data.items.use_cost;
+						vm.tel = rsp.data.items.setting.replace(/.+"tel";s:11:"(\d+)".+/, '$1');
+						vm.registerStart = new Date(Number(rsp.data.items.activitybegin)*1000);
+						vm.registerEnd = new Date(Number(rsp.data.items.activityexpiration)*1000);
 					},
 					error: function(xhr, type, errorThrown) {
 						mui.toast('获取文章内容失败');

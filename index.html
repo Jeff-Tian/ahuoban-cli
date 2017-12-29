@@ -160,9 +160,9 @@
 								mui('#list').pullRefresh().endPulldown();
 								
 								if(rsp && rsp.data && rsp.data.eventlist && rsp.data.eventlist.length > 0) {
-									lastId = rsp.data.eventlist[0].eid; //保存最新消息的id，方便下拉刷新时使用
+									lastId = rsp.data.eventlist[0].tid; //保存最新消息的id，方便下拉刷新时使用
 									news.items = news.items.concat(convert(rsp.data.eventlist).filter(function(eventItem){
-										return news.items.map(function(item){return item.eid;}).indexOf(eventItem.eid) < 0;
+										return news.items.map(function(item){return item.tid;}).indexOf(eventItem.tid) < 0;
 									}));
 								}
 							});
@@ -229,7 +229,7 @@
 				var newItems = [];
 				items.forEach(function(item) {
 					newItems.push({
-						guid: item.eid,
+						guid: item.tid,
 						title: item.subject,
 						author: item.author,
 						cover: 'https://www.ahuoban.com/' + item.coverurl,
